@@ -8,12 +8,6 @@
 # include "gnl/get_next_line.h"
 # include "libft/libft.h"
 
-// enum {
-//     NO,
-//     SO,
-//     EA,
-//     WE
-// };
 
 # define NO "NO"
 # define SO "SO"
@@ -43,6 +37,6 @@ typedef struct s_map{
 void    ft_check_map_management(char *first_taken_map, t_map *suliman);
 void    ft_identifier_fill(char *id, char *path, t_map *suliman);
 void    ft_identifier_fill_check(char *line, t_map *suliman);
-int ft_is_ok_ids(t_map *suliman);
+int     ft_is_ok_ids(t_map *suliman);
 
 #endif

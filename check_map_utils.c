@@ -3,8 +3,7 @@
 int ft_is_ok_ids(t_map *suliman)
 {
     if (suliman->map_ids.no == true && suliman->map_ids.so == true &&
-        suliman->map_ids.ea == true && suliman->map_ids.we == true &&
-        suliman->map_ids.c == true && suliman->map_ids.f == true)
+        suliman->map_ids.ea == true && suliman->map_ids.we == true)
         return (1);
     return (0);
 }
@@ -24,24 +23,33 @@ int get_false_id(t_map *suliman)
 
 void    ft_identifier_fill(char *id, char *path, t_map *suliman)
 {
-    if(ft_strncmp(id, NO, 2) == 0)
+    printf("ZORT\n");
+    if (ft_strncmp(id, NO, 2) == 0)
     {
-        suliman->no = path;
+        if (suliman->map_ids.no == true)
+            exit(31);
+        suliman->no = ft_strdup(path);
         suliman->map_ids.no = true;
     }
-    else if (ft_strncmp(id, SO, 2) == 0)
+    if (ft_strncmp(id, SO, 2) == 0)
     {
-        suliman->so = path;
+        if (suliman->map_ids.so == true)
+            exit(31);
+        suliman->so = ft_strdup(path);
         suliman->map_ids.so = true;
     }
-    else if (ft_strncmp(id, EA, 2) == 0)
+    if (ft_strncmp(id, EA, 2) == 0)
     {
-        suliman->ea = path;
+        if (suliman->map_ids.ea == true)
+            exit(31);
+        suliman->ea = ft_strdup(path);
         suliman->map_ids.ea = true;
     }
-    else if (ft_strncmp(id, WE, 2) == 0)
+    if (ft_strncmp(id, WE, 2) == 0)
     {
-        suliman->we = path;
+        if (suliman->map_ids.we == true)
+            exit(31);
+        suliman->we = ft_strdup(path);
         suliman->map_ids.we = true;
     }
 }
@@ -55,9 +63,14 @@ void    ft_identifier_fill_check(char *line, t_map *suliman)
 
     id = get_false_id(suliman);
     if (id < 0 || id > 3)
-        exit(0);
+        exit(10);
     splitted = ft_split(line, ' ');
     i = 0;
+    for (size_t i = 0; splitted[i]; i++)
+    {
+        printf("splitted line : %s\n",splitted[i]);
+    }
+    // sorun burda la gardaş
     while (splitted[i])
     {
         if (splitted[i + 1] && ft_strncmp(splitted[i], id_array[id], 2) == 0)
@@ -67,6 +80,7 @@ void    ft_identifier_fill_check(char *line, t_map *suliman)
         }
         i++;
     }
+    // 
     free(splitted);
     return ;
 }
