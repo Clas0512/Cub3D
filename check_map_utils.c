@@ -23,7 +23,7 @@ int get_false_id(t_map *suliman)
 
 void    ft_identifier_fill(char *id, char *path, t_map *suliman)
 {
-    printf("ZORT\n");
+    // printf("ZORT\n");
     if (ft_strncmp(id, NO, 2) == 0)
     {
         if (suliman->map_ids.no == true)
@@ -54,12 +54,33 @@ void    ft_identifier_fill(char *id, char *path, t_map *suliman)
     }
 }
 
+void    ft_zort(t_map *suliman, char **splitted)
+{
+    int i;
+
+    i = 0;
+
+    while (splitted[i])
+    {
+        // printf("->\n");
+        if (splitted[i + 1] && ft_strncmp(splitted[i], NO, 2) == 0 && suliman->map_ids.no == false)
+            ft_identifier_fill(splitted[i], splitted[i + 1], suliman);
+        if (splitted[i + 1] && ft_strncmp(splitted[i], SO, 2) == 0 && suliman->map_ids.so == false)
+            ft_identifier_fill(splitted[i], splitted[i + 1], suliman);
+        if (splitted[i + 1] && ft_strncmp(splitted[i], EA, 2) == 0 && suliman->map_ids.ea == false)
+            ft_identifier_fill(splitted[i], splitted[i + 1], suliman);
+        if (splitted[i + 1] && ft_strncmp(splitted[i], WE, 2) == 0 && suliman->map_ids.we == false)
+            ft_identifier_fill(splitted[i], splitted[i + 1], suliman);
+        i++;
+    }
+}
+
 void    ft_identifier_fill_check(char *line, t_map *suliman)
 {
     char    **splitted;
     int     i;
     int     id;
-    char    id_array[4][2] = {NO, SO, EA, WE};
+    // char    id_array[4][2] = {NO, SO, EA, WE};
 
     id = get_false_id(suliman);
     if (id < 0 || id > 3)
@@ -68,18 +89,12 @@ void    ft_identifier_fill_check(char *line, t_map *suliman)
     i = 0;
     for (size_t i = 0; splitted[i]; i++)
     {
-        printf("splitted line : %s\n",splitted[i]);
+        printf("splitted line asd: %s\n",splitted[i]);
     }
     // sorun burda la gardaş
-    while (splitted[i])
-    {
-        if (splitted[i + 1] && ft_strncmp(splitted[i], id_array[id], 2) == 0)
-        {
-            ft_identifier_fill(splitted[i], splitted[i + 1], suliman);
-            return ;
-        }
-        i++;
-    }
+
+    ft_zort(suliman, splitted);
+    
     // 
     free(splitted);
     return ;

@@ -27,6 +27,9 @@ int main(int ac, char **av)
     ft_init(&suliman);
     ft_check_map_management(av[1], &suliman);
     printf("MAIN: %s\n",suliman.no);
+    printf("MAIN: %s\n",suliman.so);
+    printf("MAIN: %s\n",suliman.ea);
+    printf("MAIN: %s\n",suliman.we);
     // fd = open(av[1], O_RDWR);
     // map[i] = get_next_line(fd);
     // while (map[i])
