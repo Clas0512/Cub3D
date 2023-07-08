@@ -28,6 +28,20 @@ int main(int ac, char **av)
     t_map suliman;
     ft_init(&suliman);
     ft_check_management(av[1], &suliman);
+    printf("\n-------map-------\n");
+    for (int i = 0; i < suliman.map_infos.y; i++)
+    {
+        printf("%s\n", suliman.original_map[i]);
+    }
+    printf("-----------------\n");
+    printf("\n\n\n\n--------- Main ---------\n");
+    printf("%d\n", suliman.map_infos.x);
+    printf("%d\n", suliman.map_infos.y);
+    printf("%s\n", suliman.no);
+    printf("%s\n", suliman.so);
+    printf("%s\n", suliman.ea);
+    printf("%s\n", suliman.we);
+    printf("-------------------\n");
     printf("The Last Way\n");
     return (0);
 }

@@ -17,7 +17,7 @@ char **ft_read_map(char *file_name)
         temp = get_next_line(fd);
     }
     if (line_count < 9)
-        exit(2); // map'de yeteri kadar satır yok !!!
+        exit(2); // map'de yeteri kadar satır yok !!
     full_file = malloc(sizeof(char *) * (line_count + 1));
     close(fd);
     fd = open(file_name, O_RDWR);
@@ -197,7 +197,7 @@ void    ft_find_x_y(int j, t_map *suliman)
     i = 0;
     while (*suliman->file[j] != '\n' && *suliman->file[j] != '\0')
     {
-        len = ft_strlen(*suliman->file[j]);
+        len = ft_strlen(suliman->file[j]);
         if (len > suliman->map_infos.x)
             suliman->map_infos.x = len;
         j++;
@@ -208,7 +208,7 @@ void    ft_find_x_y(int j, t_map *suliman)
 
 // void ft_fill_map_line
 
-int ft_check_and_fill_maptomap(int y, char *line)
+int ft_check_and_fill_maptocheck(int y, int map_start, char *line)
 {
     int     i;
     char    c;
@@ -217,28 +217,56 @@ int ft_check_and_fill_maptomap(int y, char *line)
     while (line[i] != '\n' && line[i] != '\0')
     {
         c = line[i];
-        if (y == 0 && !(c == '1' || c == ' '))
+        // printf("99 c: %c\n", c);
+        if (y == map_start && c != '1' && c != ' ')
             exit (199);
         if (!(c == 'N' || c == 'S' || c == 'W' ||
                 c == 'E' || c == '1' || c == '0' || c == ' '))
+        {
             exit (99);
+        }
         i++;
     }
-    
     return (0);
 }
 
-int ft_check_and_fill_map(int j, t_map *suliman)
+int ft_check_and_fill_maptofill(int j, char *line, t_map *suliman)
+{
+    int     i;
+    char    c;
+
+    suliman->original_map[j] = malloc(sizeof(char) * suliman->map_infos.x);
+    i = 0;
+    while (i < suliman->map_infos.x && line[i] != '\n' && line[i] != '\0') // sonsuz döngü
+    {
+        c = line[i];
+        printf("abc : %s\n", line);
+        if (line[i] && (i == 0 || (line[i + 1] == '\n' || line[i + 1] == '\0')) && line[i] != '1')
+            exit (999);
+        if (c == ' ')
+            c = '1';
+        suliman->original_map[j][i] = c;
+    }
+    suliman->original_map[j][i] = '\0';
+    return (1);
+}
+
+
+int ft_check_and_fill_map(int map_start, t_map *suliman)
 {
     int i;
     int y;
 
-    i = 0;
-    y = suliman->map_infos.y;
-    ft_find_x_y(j, suliman);
-    while (i < y)
+    i = map_start;
+    ft_find_x_y(map_start, suliman);
+    y = suliman->map_infos.y + i;
+    suliman->original_map = malloc(sizeof(char *) * (y + 1));
+    if (!suliman->original_map)
+        exit (13);
+    while (i < y) // i değişkeni map'in dosyadaki BAŞLANGIÇ satırından başlamış olan değişken
     {
-        ft_check_and_fill_maptomap(i, suliman->file[y]);
+        ft_check_and_fill_maptocheck(i, map_start, suliman->file[i]);
+        ft_check_and_fill_maptofill(i, suliman->file[i], suliman);
         i++;
     }
     return (0);
@@ -260,7 +288,7 @@ int ft_check_management(char *first_taken_map, t_map *suliman)
         if (ft_ids_are_ok(suliman))
         {
             if (ft_check_and_fill_map(i, suliman))
-                exit(31);
+                exit (31);
             return (0);
         }
         if (ft_check_line(suliman->file[i], suliman))
