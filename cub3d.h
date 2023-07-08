@@ -34,9 +34,7 @@ typedef struct s_map{
     int     c[3];
 }       t_map;
 
-void    ft_check_map_management(char *first_taken_map, t_map *suliman);
-void    ft_identifier_fill(char *id, char *path, t_map *suliman);
-void    ft_identifier_fill_check(char *line, t_map *suliman);
+int     ft_check_management(char *first_taken_map, t_map *suliman);
 int     ft_is_ok_ids(t_map *suliman);
 
 #endif

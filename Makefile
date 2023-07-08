@@ -15,10 +15,14 @@ $(ZORT)	:
 		make -C ./gnl
 		make -C ./libft
 		
-$(NAME)	:
-		make -C ./gnl
-		make -C ./libft
+$(NAME)	: $(LIBFT) $(GNL) $(SRCS)
 		$(COMPILER) $(SRCS) $(LBFT) $(GNL) $(FLAGS) -o $(NAME)
+
+$(GNL) :
+		make -C ./gnl
+
+$(LBFT) :
+		make -C ./libft
 
 all : $(NAME)
 
