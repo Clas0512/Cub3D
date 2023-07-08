@@ -12,6 +12,8 @@ void    ft_init(t_map *suliman)
     suliman->so = "SO";
     suliman->we = "WE";
     suliman->ea = "EA";
+    suliman->map_infos.x = 0;
+    suliman->map_infos.y = 0;
 }
 
 int main(int ac, char **av)
@@ -26,5 +28,6 @@ int main(int ac, char **av)
     t_map suliman;
     ft_init(&suliman);
     ft_check_management(av[1], &suliman);
+    printf("The Last Way\n");
     return (0);
 }

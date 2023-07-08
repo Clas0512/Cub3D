@@ -14,6 +14,11 @@
 # define EA "EA"
 # define WE "WE"
 
+typedef struct s_map_informations{
+    int x;
+    int y;
+}       t_map_informations;
+
 typedef struct s_map_ids{
     bool no;
     bool so;
@@ -25,6 +30,8 @@ typedef struct s_map_ids{
 
 typedef struct s_map{
     t_map_ids map_ids;
+    t_map_informations map_infos;
+    char    **original_map;
     char    **file;
     char    *no;
     char    *so;

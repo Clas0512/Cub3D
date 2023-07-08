@@ -16,7 +16,6 @@ char **ft_read_map(char *file_name)
         line_count++;
         temp = get_next_line(fd);
     }
-    printf("lc : %d\n", line_count);
     if (line_count < 9)
         exit(2); // map'de yeteri kadar satır yok !!!
     full_file = malloc(sizeof(char *) * (line_count + 1));
@@ -139,12 +138,10 @@ int ft_is_rgb(int id, char *rgb, t_map *suliman)
     int b;
 
     rgb_2d = ft_split(rgb, ',');
-    printf("rgbnin üstü: %s\n", rgb);
     if (!rgb)
         return (0);
     if (!rgb_2d[2])
         return (0);
-    printf("ok1\n");
     r = ft_atoi(rgb_2d[0]);
     g = ft_atoi(rgb_2d[1]);
     b = ft_atoi(rgb_2d[2]);
@@ -160,25 +157,17 @@ int ft_check_line(char *line, t_map *suliman)
     int     i;
     int     id;
 
-    printf("check: %s", line);
     i = 0;
     tmp = ft_split(line, ' ');
-    printf("tmp[0] = '%s' tmp[1] = '%s'", tmp[0], tmp[1]);
     id = ft_which_id(tmp[0]);
     if (ft_id_is_true(id, suliman))
-    {
-        printf("zort\n");
         return (1);
-    }
     // if (ft_is_valid_path(tmp[2], suliman) == 0)
     //     return (1);
     if (id != 5 && id != 6)
         ft_fill_the_id(id, tmp[1], suliman);
     else if (ft_is_rgb(id, tmp[1], suliman) == 0)
-    {
-        printf("zort1\n");
         return (1);
-    }
     return (0);
 }
 
@@ -189,6 +178,70 @@ int ft_ids_are_ok(t_map *suliman)
         suliman->map_ids.f == false || suliman->map_ids.c == false)
         return (0);
     return (1);
+}
+
+// harita koşulları : 
+//             1-) haritada bulunabilecek olası karakterler : N, S, W, E, 1, 0
+//             2-) dikdörtgen olması koşulu
+//             3-) 4 bir tarafıııım 1'ler ile çevriliiiğ
+//             4-) boşluk karakterleri dışında harita bölnüemez
+//             5-) bu 5 kural hiç bir şekilde değiştirilemez değiştirilmesi teklif dahi edilemez!
+
+void    ft_find_x_y(int j, t_map *suliman)
+{
+    int len;
+    int i;
+
+    suliman->map_infos.x = 0;
+    suliman->map_infos.y = 0;
+    i = 0;
+    while (*suliman->file[j] != '\n' && *suliman->file[j] != '\0')
+    {
+        len = ft_strlen(*suliman->file[j]);
+        if (len > suliman->map_infos.x)
+            suliman->map_infos.x = len;
+        j++;
+        i++;
+    }
+    suliman->map_infos.y = i;
+}
+
+// void ft_fill_map_line
+
+int ft_check_and_fill_maptomap(int y, char *line)
+{
+    int     i;
+    char    c;
+
+    i = 0;
+    while (line[i] != '\n' && line[i] != '\0')
+    {
+        c = line[i];
+        if (y == 0 && !(c == '1' || c == ' '))
+            exit (199);
+        if (!(c == 'N' || c == 'S' || c == 'W' ||
+                c == 'E' || c == '1' || c == '0' || c == ' '))
+            exit (99);
+        i++;
+    }
+    
+    return (0);
+}
+
+int ft_check_and_fill_map(int j, t_map *suliman)
+{
+    int i;
+    int y;
+
+    i = 0;
+    y = suliman->map_infos.y;
+    ft_find_x_y(j, suliman);
+    while (i < y)
+    {
+        ft_check_and_fill_maptomap(i, suliman->file[y]);
+        i++;
+    }
+    return (0);
 }
 
 int ft_check_management(char *first_taken_map, t_map *suliman)
@@ -206,21 +259,13 @@ int ft_check_management(char *first_taken_map, t_map *suliman)
         }
         if (ft_ids_are_ok(suliman))
         {
-            ft_read_map_line(suliman);
-            i++;
-            continue ;
+            if (ft_check_and_fill_map(i, suliman))
+                exit(31);
+            return (0);
         }
-        printf("ok\n");
         if (ft_check_line(suliman->file[i], suliman))
             exit (62);
         i++;
     }
-    printf("\n\n\n\n");
-    printf("%s\n", suliman->no);
-    printf("%s\n", suliman->so);
-    printf("%s\n", suliman->ea);
-    printf("%s\n", suliman->we);
-    printf("%d , %d , %d\n", suliman->f[0], suliman->f[1], suliman->f[2]);
-    printf("%d , %d , %d\n", suliman->c[0], suliman->c[1], suliman->c[2]);
     return (0);
 }
