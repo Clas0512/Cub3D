@@ -14,6 +14,12 @@
 # define EA "EA"
 # define WE "WE"
 
+typedef struct s_player{
+    int p_x;
+    int p_y;
+    int p_direction; // N=1 S=2 E=3 W=4
+}       t_player;
+
 typedef struct s_map_informations{
     int x;
     int y;
@@ -31,6 +37,7 @@ typedef struct s_map_ids{
 typedef struct s_map{
     t_map_ids map_ids;
     t_map_informations map_infos;
+    t_player player;
     char    **original_map;
     char    **file;
     char    *no;

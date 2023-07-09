@@ -151,6 +151,17 @@ int ft_is_rgb(int id, char *rgb, t_map *suliman)
     return (1);
 }
 
+int ft_is_valid_path(char *path)
+{
+    int fd;
+
+    fd = open(path, O_RDONLY);
+    if (fd == -1)
+        exit (222);
+    close(fd);
+    return (0);
+}
+
 int ft_check_line(char *line, t_map *suliman)
 {
     char    **tmp;
@@ -162,8 +173,8 @@ int ft_check_line(char *line, t_map *suliman)
     id = ft_which_id(tmp[0]);
     if (ft_id_is_true(id, suliman))
         return (1);
-    // if (ft_is_valid_path(tmp[2], suliman) == 0)
-    //     return (1);
+    if (ft_is_valid_path(tmp[1]) == 0)
+        return (1);
     if (id != 5 && id != 6)
         ft_fill_the_id(id, tmp[1], suliman);
     else if (ft_is_rgb(id, tmp[1], suliman) == 0)
@@ -187,6 +198,16 @@ int ft_ids_are_ok(t_map *suliman)
 //             4-) boşluk karakterleri dışında harita bölnüemez
 //             5-) bu 5 kural hiç bir şekilde değiştirilemez değiştirilmesi teklif dahi edilemez!
 
+size_t	ft_strlen_modded(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i] && s[i] != '\n')
+		i++;
+	return (i);
+}
+
 void    ft_find_x_y(int j, t_map *suliman)
 {
     int len;
@@ -197,13 +218,16 @@ void    ft_find_x_y(int j, t_map *suliman)
     i = 0;
     while (suliman->file[j] && *suliman->file[j] != '\n' && *suliman->file[j] != '\0')
     {
-        len = ft_strlen(suliman->file[j]);
+        // printf("satir %d. = '%s'", j, suliman->file[j]);
+        len = ft_strlen_modded(suliman->file[j]);
         if (len > suliman->map_infos.x)
             suliman->map_infos.x = len;
         j++;
         i++;
     }
     suliman->map_infos.y = i;
+    // printf("x : %d\n", suliman->map_infos.x);
+    // printf("y : %d\n", suliman->map_infos.y);
 }
 
 int ft_check_and_fill_maptocheck(int y, int map_start, char *line)
@@ -231,18 +255,20 @@ int ft_check_and_fill_maptofill(char *line, t_map *suliman)
     char        c;
     static int  z;
 
-    suliman->original_map[z] = malloc(sizeof(char) * suliman->map_infos.x);
+    suliman->original_map[z] = malloc(sizeof(char) * (suliman->map_infos.x + 1));
     i = 0;
-    while (i < suliman->map_infos.x - 1)
+    while (i < suliman->map_infos.x)
     {
         c = '1';
-        if (line[i] == '1' || line[i] == '0' || line[i] == 'N' || line[i] == 'S' ||
-                    line[i] == 'E' || line[i] == 'W')
+        if (i < (int)ft_strlen_modded(line) && (line[i] == '1' || line[i] == '0' || line[i] == 'N' || line[i] == 'S' ||
+                    line[i] == 'E' || line[i] == 'W'))
             c = line[i];
+        // printf("%d. %c\n", i, c);
         suliman->original_map[z][i] = c;
         i++;
     }
     suliman->original_map[z][i] = '\0';
+    // printf("%d. satir : '%s'\n", z, suliman->original_map[z]);
     z++;
     return (1);
 }
@@ -263,15 +289,57 @@ int ft_check_after(t_map *suliman)
             if (i == 0 && c != '1')
                 exit (145);
             else if (i == suliman->map_infos.y - 1 && c != '1')
+            {
+                printf("%d,%d - %c\n", j, i, c);
                 exit (146);
+            }
             else if (j == 0 && c != '1')
                 exit (147);
-            else if (j == suliman->map_infos.x - 2 && c != '1')
+            else if (j == suliman->map_infos.x - 1 && c != '1')
                 exit (148);
             j++;
         }
         i++;
     }
+    return (0);
+}
+
+int ft_check_and_fill_player_extra(char c, bool *flag, t_map *suliman, int i, int j)
+{
+    if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+    {
+        if (*flag == false)
+        {
+            suliman->player.p_x = j;
+            suliman->player.p_y = i;
+            *flag = true;
+        }
+        else
+            exit(51);
+    }
+    return (0);
+}
+
+int ft_check_and_fill_player(t_map *suliman)
+{
+    int     i;
+    int     j;
+    bool    flag;
+
+    flag = false;
+    i = 0;
+    while (suliman->original_map[i])
+    {
+        j = 0;
+        while (suliman->original_map[i][j])
+        {
+            ft_check_and_fill_player_extra(suliman->original_map[i][j], &flag, suliman, i, j);
+            j++;
+        }
+        i++;
+    }
+    if (flag == false)
+        return (1);
     return (0);
 }
 
@@ -283,7 +351,7 @@ int ft_check_and_fill_map(int map_start, t_map *suliman)
     i = map_start;
     ft_find_x_y(map_start, suliman);
     y = suliman->map_infos.y + i;
-    suliman->original_map = malloc(sizeof(char *) * (y + 1));
+    suliman->original_map = malloc(sizeof(char *) * (suliman->map_infos.y + 1));
     if (!suliman->original_map)
         exit (13);
     while (i < y) // i değişkeni map'in dosyadaki BAŞLANGIÇ satırından başlamış olan değişken
@@ -294,6 +362,11 @@ int ft_check_and_fill_map(int map_start, t_map *suliman)
     }
     if (ft_check_after(suliman))
         exit (149);
+    if (ft_check_and_fill_player(suliman))
+    {
+        perror("Player is not exist!");
+        exit (52);
+    }
     return (0);
 }
 
