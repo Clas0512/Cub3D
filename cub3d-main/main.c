@@ -54,7 +54,7 @@ struct s_raycast_wall{
 	float ray_len;
 };
 
-struct s_raycast_wall raycast[60];
+struct s_raycast_wall raycast[256];
 
 
 int map[] = {
@@ -233,13 +233,13 @@ void put_apect(){
 	float end_x = begin_x + dx * 20;
 	float end_y = begin_y + dy * 20;
 	float newo = player.alpha;
-	newo -= 30 * 0.0174533;
+	newo -= 128 * 0.0174533 / 4;
 	if (newo < 0){
 		newo += 2*PI;
 	}
 	dx = cos(newo);
 	dy = sin(newo);
-	for (size_t j = 0; j < 60; j++)
+	for (size_t j = 0; j < 384; j++)
 	{
 		for (size_t i = 1; i < 10000; i++)
 		{
@@ -255,7 +255,7 @@ void put_apect(){
 		raycast[j].y = end_y;
 		raycast[j].ray_len = sqrt(pow(fabs(end_x - begin_x), 2) + pow(fabs(end_y - begin_y), 2));
 		DDA(begin_x, begin_y, end_x, end_y, GREEN);
-		newo += 0.0174533;
+		newo += 0.0174533 / 4;
 		dx = cos(newo);
 		dy = sin(newo);
 	}
@@ -288,20 +288,33 @@ void map_init(int x, int y){
 	mlx_put_image_to_window(data.mlx, data.win, image.image, 0, 0);
 }
 
-void put_wall(int x, int y, struct s_image img){
+float calc_ratio(float ray_len)
+{
+	float wall_len;
 
+	wall_len = 768 * 20 / ray_len;
+	return (wall_len);
+}
+
+void put_wall(int x, int y, struct s_image img)
+{
 	printf("x:%d, y:%d\n",x,y);
-	int height = data.height / 2;
-	int width = (data.width / 2) * 3;
+	int height = data.height / 2 - 1;
+	int width = data.width;
 	int xx;
-	int j = 360;
-	for (size_t i = 0; i < 60; i++)
+	int yy;
+	// int j = width;
+	for (size_t i = 0; i < 384; i++)
 	{
-		xx = width - j;
-		put_image(xx, height - 10, xx + 3, height + 10, BLACK, img);
+		yy = (int)calc_ratio(raycast[i].ray_len);
+		if (i < 32)
+			put_image(width, height - (yy / 2), width + (width / 384), height + (yy / 2), RED, img);
+		else
+			put_image(width, height - (yy / 2), width + (width / 384), height + (yy / 2), BLACK, img);
+		printf("boy : %d\n", height);
 		printf("i : %zu - raylength : %f\n", i, raycast[i].ray_len);
 		printf("raylen: %f\n",raycast[i].ray_len);
-		j -= 12;
+		width += width / 384;
 	}
 }
 
@@ -309,7 +322,7 @@ void map_init_3D(int x, int y, struct s_image img){
 	printf("ZORT\n");
 	int i = 0;
 	put_image(x, 0, x + data.width, data.height / 2, GRAY, img);
-	put_image(data.width, data.height / 2, data.width + data.width - 10 , data.height - 10, GREEN, img);
+	put_image(data.width, data.height / 2, data.width + data.width - 1 , data.height - 1, GREEN, img);
 	printf("--------- ZOOOOOOOOORT ---------\n");
 	// printf("x:%d, y:%d\n", x, y);
 	put_wall(x, y, img);
@@ -318,7 +331,8 @@ void map_init_3D(int x, int y, struct s_image img){
 	mlx_put_image_to_window(data.mlx, data.win, img.image, data.width, 0);
 }
 
-int player_loca(){
+int player_loca()
+{
 	for (size_t i = 0; i < data.size; i++)
 	{
 		if (map[i] == -1) return (i);
