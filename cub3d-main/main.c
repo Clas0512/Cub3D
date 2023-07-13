@@ -54,7 +54,7 @@ struct s_raycast_wall{
 	float ray_len;
 };
 
-struct s_raycast_wall raycast[256];
+struct s_raycast_wall raycast[768];
 
 
 int map[] = {
@@ -86,8 +86,8 @@ void	init_data(){
 	data.width = 6;
 	data.height = (sizeof(map) / sizeof(int)) / data.width;
 	data.size = sizeof(map) / sizeof(int);
-	player.delta_x = cos(player.alpha);
-	player.delta_y = sin(player.alpha);
+	player.delta_x = cos(player.alpha)*5;
+	player.delta_y = sin(player.alpha)*5;
 	printf("delta_x:%f, delta_y:%f", player.delta_x, player.delta_y);
 	// printf("data size: %d\n", data.size);
 	data.width *= data.units, data.height *= data.units;
@@ -123,7 +123,7 @@ int keyboard(int keycode, void *n)
 		y -= player.delta_y*2;
 		x -= player.delta_x*2;
 	}
-	else if (keycode == 100 || keycode == 2){
+	else if (keycode == 100 || keycode == 2 || keycode == 65363 || keycode == 124){
 		printf("D tuşuna basıldı.\n");
 		player.alpha += 0.1;
 		if (player.alpha > 2*PI){
@@ -132,7 +132,7 @@ int keyboard(int keycode, void *n)
 		player.delta_x = cos(player.alpha)*5;
 		player.delta_y = sin(player.alpha)*5;
 	}
-	else if (keycode == 97 || keycode == 0){
+	else if (keycode == 97 || keycode == 0 || keycode == 65361 || keycode == 123){
 		printf("A tuşuna basıldı.\n");
 		player.alpha -= 0.1;
 		if (player.alpha < 0){
@@ -144,24 +144,6 @@ int keyboard(int keycode, void *n)
 	else if (keycode == 53 || keycode == 65307){
 		printf("ESC tuşuna basıldı.\n");
 		shutdown(&data);
-	}
-	if (keycode == 65361 || keycode == 123){ // sol
-		printf("<= tuşuna basıldı.\n");
-		player.alpha -= 0.1;
-		if (player.alpha < 0){
-			player.alpha += 2*PI;
-		}
-		player.delta_x = cos(player.alpha);
-		player.delta_y = sin(player.alpha);
-	}
-	else if (keycode == 65363 || keycode == 124){ // sağ
-		printf("=> tuşuna basıldı.\n");
-		player.alpha += 0.1;
-		if (player.alpha > 2*PI){
-			player.alpha -= 2*PI;
-		}
-		player.delta_x = cos(player.alpha);
-		player.delta_y = sin(player.alpha);
 	}
 	map_init(x, y);
 	map_init_3D(x, y, img);
@@ -233,13 +215,13 @@ void put_apect(){
 	float end_x = begin_x + dx * 20;
 	float end_y = begin_y + dy * 20;
 	float newo = player.alpha;
-	newo -= 128 * 0.0174533 / 4;
+	newo -= 384 * 0.0174533 / 12;
 	if (newo < 0){
 		newo += 2*PI;
 	}
 	dx = cos(newo);
 	dy = sin(newo);
-	for (size_t j = 0; j < 384; j++)
+	for (size_t j = 0; j < 768; j++)
 	{
 		for (size_t i = 1; i < 10000; i++)
 		{
@@ -255,7 +237,7 @@ void put_apect(){
 		raycast[j].y = end_y;
 		raycast[j].ray_len = sqrt(pow(fabs(end_x - begin_x), 2) + pow(fabs(end_y - begin_y), 2));
 		DDA(begin_x, begin_y, end_x, end_y, GREEN);
-		newo += 0.0174533 / 4;
+		newo += 0.0174533 / 12;
 		dx = cos(newo);
 		dy = sin(newo);
 	}
@@ -299,22 +281,19 @@ float calc_ratio(float ray_len)
 void put_wall(int x, int y, struct s_image img)
 {
 	printf("x:%d, y:%d\n",x,y);
-	int height = data.height / 2 - 1;
+	int height = data.height / 2;
 	int width = data.width;
 	int xx;
 	int yy;
 	// int j = width;
-	for (size_t i = 0; i < 384; i++)
+	for (size_t i = 0; i < 768; i++)
 	{
 		yy = (int)calc_ratio(raycast[i].ray_len);
-		if (i < 32)
-			put_image(width, height - (yy / 2), width + (width / 384), height + (yy / 2), RED, img);
-		else
-			put_image(width, height - (yy / 2), width + (width / 384), height + (yy / 2), BLACK, img);
+		put_image(width, height - (yy / 2), width + (width / 768), height + (yy / 2), BLACK, img);
 		printf("boy : %d\n", height);
 		printf("i : %zu - raylength : %f\n", i, raycast[i].ray_len);
 		printf("raylen: %f\n",raycast[i].ray_len);
-		width += width / 384;
+		width += data.width / 768;
 	}
 }
 
@@ -346,7 +325,7 @@ int main(){
 	img.buffer = mlx_get_data_addr(img.image, &(img.bits_per_pixel), &(img.size_line), &(img.endian));
 	img.calc_x = &calc_x;
 	img.calc_y = &calc_y;
-	map_init(image.calc_x(player_loca()), image.calc_y(player_loca()));
+	map_init(image.calc_x(player_loca()) + 5, image.calc_y(player_loca()) + 5);
 	map_init_3D(data.width, data.height, img);
 	mlx_hook(data.win, 2, 1L << 0, keyboard, &data);
 	mlx_hook(data.win, 17, 0, shutdown, &data);	
