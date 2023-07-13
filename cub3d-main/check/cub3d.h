@@ -48,7 +48,7 @@ typedef struct s_map{
     int     c[3];
 }       t_map;
 
-int     ft_check_management(char *first_taken_map, t_map *suliman);
-int     ft_is_ok_ids(t_map *suliman);
+int     ft_check_management(char *first_taken_map, t_map *main_s);
+int     ft_is_ok_ids(t_map *main_s);
 
 #endif

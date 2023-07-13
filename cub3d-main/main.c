@@ -115,13 +115,13 @@ int keyboard(int keycode, void *n)
 	int x = player.x, y = player.y;
 	if (keycode == 119 || keycode == 13){
 		printf("W tuşuna basıldı.\n");
-		y += player.delta_y*2;
-		x += player.delta_x*2;
+		y += (int)player.delta_y*2;
+		x += (int)player.delta_x*2;
 	}
 	else if (keycode == 115 || keycode == 1){
 		printf("S tuşuna basıldı.\n");
-		y -= player.delta_y*2;
-		x -= player.delta_x*2;
+		x -= (int)player.delta_x*2;
+		y -= (int)player.delta_y*2;
 	}
 	else if (keycode == 100 || keycode == 2 || keycode == 65363 || keycode == 124){
 		printf("D tuşuna basıldı.\n");
@@ -159,17 +159,14 @@ void my_mlx_pixel_put(int x, int y, int color, struct s_image img){
 void put_image(int begin_x, int begin_y, int end_x, int end_y, int color, struct s_image img){
 	for (int y = begin_y; y < end_y; y++)
 	for (int x = begin_x; x < end_x; x++)
-	{
 		my_mlx_pixel_put(x, y, color, img);
-	}
-	
 }
 
 void draw(int beginX, int beginY, int endX, int endY, int color){
 	double deltaX = endX - beginX;
 	double deltaY = endY - beginY;
 	int pixels = sqrt((deltaX * deltaX) + (deltaY * deltaY));
-	deltaX /= pixels; // 1
+	deltaX /= pixels;
 	deltaY /= pixels; 	 
 	double pixelX = beginX;
 	double pixelY = beginY;
@@ -236,7 +233,10 @@ void put_apect(){
 		raycast[j].x = end_x;
 		raycast[j].y = end_y;
 		raycast[j].ray_len = sqrt(pow(fabs(end_x - begin_x), 2) + pow(fabs(end_y - begin_y), 2));
-		DDA(begin_x, begin_y, end_x, end_y, GREEN);
+		if (j < 392 && j > 376)
+			DDA(begin_x, begin_y, end_x, end_y, BLACK);
+		else
+			DDA(begin_x, begin_y, end_x, end_y, GREEN);
 		newo += 0.0174533 / 12;
 		dx = cos(newo);
 		dy = sin(newo);
@@ -267,14 +267,16 @@ void map_init(int x, int y){
 	player.x = x; player.y = y;
 	put_apect();
 	printf("%d\n", i);
-	mlx_put_image_to_window(data.mlx, data.win, image.image, 0, 0);
+	// mlx_put_image_to_window(data.mlx, data.win, image.image, 0, 0);
 }
 
 float calc_ratio(float ray_len)
 {
 	float wall_len;
 
-	wall_len = 768 * 20 / ray_len;
+	wall_len = data.height * 20 / ray_len;
+	if (wall_len > data.height)
+		return(data.height);
 	return (wall_len);
 }
 
@@ -288,11 +290,10 @@ void put_wall(int x, int y, struct s_image img)
 	// int j = width;
 	for (size_t i = 0; i < 768; i++)
 	{
+		// printf("RAY_LEN : '%f'\n", raycast[i].ray_len);
 		yy = (int)calc_ratio(raycast[i].ray_len);
+		printf("yy:%d\n", yy);
 		put_image(width, height - (yy / 2), width + (width / 768), height + (yy / 2), BLACK, img);
-		printf("boy : %d\n", height);
-		printf("i : %zu - raylength : %f\n", i, raycast[i].ray_len);
-		printf("raylen: %f\n",raycast[i].ray_len);
 		width += data.width / 768;
 	}
 }
@@ -307,7 +308,7 @@ void map_init_3D(int x, int y, struct s_image img){
 	put_wall(x, y, img);
 	// put_wall(x, y, img);
 	// put_image(x - (data.units / 2), y + (data.units / 2), x + (data.units / 2), y + (data.units / 2) * 2, RED, img);
-	mlx_put_image_to_window(data.mlx, data.win, img.image, data.width, 0);
+	mlx_put_image_to_window(data.mlx, data.win, img.image, 0, 0);
 }
 
 int player_loca()
