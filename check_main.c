@@ -16,15 +16,8 @@ void    ft_init(t_map *main_s)
     main_s->map_infos.y = 0;
 }
 
-int main(int ac, char **av)
+int check_main(int ac, char **av)
 {
-    // int fd;
-    int i;
-    i = 0;
-    char **map;
-    map = malloc(sizeof(char *) * 20);
-    (void)ac;
-    (void)av;
     t_map main_s;
     ft_init(&main_s);
     ft_check_management(av[1], &main_s);
@@ -43,5 +36,10 @@ int main(int ac, char **av)
     printf("we : %s\n", main_s.we);
     printf("-------------------\n");
     printf("The Last Way\n");
+    printf("-------------------\n");
+    printf("-------------------\n");
+    printf("-------------------\n");
+    printf("\n\n\n\n");
+    printf("map infos: x: %d -  y: %d\n", main_s.map_infos.x, main_s.map_infos.y);
     return (0);
 }

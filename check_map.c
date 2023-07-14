@@ -156,6 +156,7 @@ int ft_is_valid_path(char *path)
     int fd;
 
     fd = open(path, O_RDONLY);
+    printf(" ww %s\n", path);
     if (fd == -1)
         exit (222);
     close(fd);
@@ -165,16 +166,14 @@ int ft_is_valid_path(char *path)
 int ft_check_line(char *line, t_map *main_s)
 {
     char    **tmp;
-    int     i;
     int     id;
 
-    i = 0;
     tmp = ft_split(line, ' ');
     id = ft_which_id(tmp[0]);
     if (ft_id_is_true(id, main_s))
         return (1);
-    if (ft_is_valid_path(tmp[1]) == 0)
-        return (1);
+    // if (ft_is_valid_path(tmp[1]) == 0)
+    //     return (1);
     if (id != 5 && id != 6)
         ft_fill_the_id(id, tmp[1], main_s);
     else if (ft_is_rgb(id, tmp[1], main_s) == 0)

@@ -4,19 +4,21 @@ LBFT		= libft/libft.a
 
 GNL			= gnl/gnl.a
 
-SRCS		= main.c check_map.c check_map_utils.c
+MLX			= mlx/libmlx.a
+
+SRCS		= main.c check_map.c check_main.c
 
 COMPILER	= gcc
 
-FLAGS		= -Wall -Wextra -Werror -g
-
+FLAGS		= -Wall -Wextra -Werror -framework OpenGL -framework AppKit -g
 
 $(ZORT)	:
 		make -C ./gnl
 		make -C ./libft
+		make -C ./mlx
 		
 $(NAME)	: $(LIBFT) $(GNL) $(SRCS)
-		$(COMPILER) $(SRCS) $(LBFT) $(GNL) $(FLAGS) -o $(NAME)
+		$(COMPILER) $(SRCS) $(MLX) $(LBFT) $(GNL) $(FLAGS) -o $(NAME)
 
 $(GNL) :
 		make -C ./gnl

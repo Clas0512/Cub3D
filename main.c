@@ -1,16 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <math.h>
-#include "mlx/mlx.h"
-
-# define PI		3.14159265
-# define GREEN	0x25bc17
-# define WHITE	0xffffff
-# define RED	0XF51313
-# define LILAC	0x8C1DEE
-# define BLACK	0x000000
-# define GRAY	0x726E6E
+#include "cub3d.h"
 
 struct s_data{
 	int		width;
@@ -83,7 +71,7 @@ int	calc_y(int index){
 void	init_data(){
 	data.units = 128;
 	player.size = data.units / 8;
-	data.width = 6;
+	data.width = 6; // main_s eklenecek
 	data.height = (sizeof(map) / sizeof(int)) / data.width;
 	data.size = sizeof(map) / sizeof(int);
 	player.delta_x = cos(player.alpha)*5;
@@ -285,7 +273,6 @@ void put_wall(int x, int y, struct s_image img)
 	printf("x:%d, y:%d\n",x,y);
 	int height = data.height / 2;
 	int width = data.width;
-	int xx;
 	int yy;
 	// int j = width;
 	for (size_t i = 0; i < 768; i++)
@@ -300,7 +287,6 @@ void put_wall(int x, int y, struct s_image img)
 
 void map_init_3D(int x, int y, struct s_image img){
 	printf("ZORT\n");
-	int i = 0;
 	put_image(x, 0, x + data.width, data.height / 2, GRAY, img);
 	put_image(data.width, data.height / 2, data.width + data.width - 1 , data.height - 1, GREEN, img);
 	printf("--------- ZOOOOOOOOORT ---------\n");
@@ -313,23 +299,24 @@ void map_init_3D(int x, int y, struct s_image img){
 
 int player_loca()
 {
-	for (size_t i = 0; i < data.size; i++)
+	for (int i = 0; i < data.size; i++)
 	{
 		if (map[i] == -1) return (i);
 	}	
 	return (0);
 }
 
-int main(){
-	init_data();
-	img.image = mlx_new_image(data.mlx, data.width, data.height);
-	img.buffer = mlx_get_data_addr(img.image, &(img.bits_per_pixel), &(img.size_line), &(img.endian));
-	img.calc_x = &calc_x;
-	img.calc_y = &calc_y;
-	map_init(image.calc_x(player_loca()) + 5, image.calc_y(player_loca()) + 5);
-	map_init_3D(data.width, data.height, img);
-	mlx_hook(data.win, 2, 1L << 0, keyboard, &data);
-	mlx_hook(data.win, 17, 0, shutdown, &data);	
-	// exit(1);
-	mlx_loop(data.mlx);
+int main(int ac, char **av)
+{
+	// init_data();
+	// img.image = mlx_new_image(data.mlx, data.width, data.height);
+	// img.buffer = mlx_get_data_addr(img.image, &(img.bits_per_pixel), &(img.size_line), &(img.endian));
+	// img.calc_x = &calc_x;
+	// img.calc_y = &calc_y;
+	// map_init(image.calc_x(player_loca()) + 5, image.calc_y(player_loca()) + 5);
+	// map_init_3D(data.width, data.height, img);
+	// mlx_hook(data.win, 2, 1L << 0, keyboard, &data);
+	// mlx_hook(data.win, 17, 0, shutdown, &data);
+	check_main(ac, av);
+	// mlx_loop(data.mlx);
 }
