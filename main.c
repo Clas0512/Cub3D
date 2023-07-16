@@ -23,19 +23,6 @@ struct s_image{
 } image;
 struct s_image img;
 
-struct s_player
-{
-	float	x;
-	float	y;
-	float	delta_x;
-	float	delta_y;
-	float	alpha;
-	float	m;
-	float	diagonal;
-	int 	index;
-	int 	size;
-} player;
-
 struct s_raycast_wall{
 	int x;
 	int y;
@@ -57,7 +44,7 @@ int map[] = {
 };
 
 void move(int x, int y);
-void map_init(int x, int y);
+void map_init(int x, int y, t_map *main_s);
 void map_init_3D(int x, int y, struct s_image img);
 
 int	calc_x(int index){
@@ -68,15 +55,15 @@ int	calc_y(int index){
 	return ((index / 6) * data.units);
 }
 
-void	init_data(){
+void	init_data(t_map *main_s){
 	data.units = 128;
-	player.size = data.units / 8;
-	data.width = 6; // main_s eklenecek
-	data.height = (sizeof(map) / sizeof(int)) / data.width;
+	main_s->player_3d.size = data.units / 8;
+	data.width = main_s->map_infos.x;
+	data.height = main_s->map_infos.y;
 	data.size = sizeof(map) / sizeof(int);
-	player.delta_x = cos(player.alpha)*5;
-	player.delta_y = sin(player.alpha)*5;
-	printf("delta_x:%f, delta_y:%f", player.delta_x, player.delta_y);
+	main_s->player_3d.delta_x = cos(main_s->player_3d.alpha);
+	main_s->player_3d.delta_y = sin(main_s->player_3d.alpha);
+	printf("delta_x:%f, delta_y:%f", main_s->player_3d.delta_x, main_s->player_3d.delta_y);
 	// printf("data size: %d\n", data.size);
 	data.width *= data.units, data.height *= data.units;
 	printf("width: %d height: %d\n", data.width, data.height);
@@ -197,8 +184,8 @@ void put_apect(){
 	float begin_y = player.y;
 	float dx = player.delta_x;
 	float dy = player.delta_y;
-	float end_x = begin_x + dx * 20;
-	float end_y = begin_y + dy * 20;
+	float end_x = begin_x + dx * 100;
+	float end_y = begin_y + dy * 100;
 	float newo = player.alpha;
 	newo -= 384 * 0.0174533 / 12;
 	if (newo < 0){
@@ -231,10 +218,10 @@ void put_apect(){
 	}
 }
 
-void map_init(int x, int y){
+void map_init(int x, int y, t_map *main_s){
 	int i = 0;
 
-	if (map[(x / 128) + ((y / 128) * 6)] == 1){
+	if (map[(x / 128) + ((y / 128) * main_s->map_infos.x)] == 1){
 		return;
 	}
 	mlx_clear_window(data.mlx, data.win);
@@ -308,15 +295,17 @@ int player_loca()
 
 int main(int ac, char **av)
 {
-	// init_data();
-	// img.image = mlx_new_image(data.mlx, data.width, data.height);
-	// img.buffer = mlx_get_data_addr(img.image, &(img.bits_per_pixel), &(img.size_line), &(img.endian));
-	// img.calc_x = &calc_x;
-	// img.calc_y = &calc_y;
-	// map_init(image.calc_x(player_loca()) + 5, image.calc_y(player_loca()) + 5);
-	// map_init_3D(data.width, data.height, img);
-	// mlx_hook(data.win, 2, 1L << 0, keyboard, &data);
-	// mlx_hook(data.win, 17, 0, shutdown, &data);
-	check_main(ac, av);
-	// mlx_loop(data.mlx);
+	(void)ac;
+	t_map main_s;
+	check_main(av, &main_s);
+	init_data(&main_s);
+	img.image = mlx_new_image(data.mlx, data.width, data.height);
+	img.buffer = mlx_get_data_addr(img.image, &(img.bits_per_pixel), &(img.size_line), &(img.endian));
+	img.calc_x = &calc_x;
+	img.calc_y = &calc_y;
+	map_init(image.calc_x(player_loca()) + 5, image.calc_y(player_loca()) + 5, &main_s);
+	map_init_3D(data.width, data.height, img);
+	mlx_hook(data.win, 2, 1L << 0, keyboard, &data);
+	mlx_hook(data.win, 17, 0, shutdown, &data);
+	mlx_loop(data.mlx);
 }

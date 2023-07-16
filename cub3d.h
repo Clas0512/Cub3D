@@ -44,10 +44,24 @@ typedef struct s_map_ids{
     bool c;
 }       t_map_ids;
 
+typedef struct s_player
+{
+	float	x;
+	float	y;
+	float	delta_x;
+	float	delta_y;
+	float	alpha;
+	float	m;
+	float	diagonal;
+	int 	index;
+	int 	size;
+}		t_player;
+
 typedef struct s_map{
-    t_map_ids map_ids;
-    t_map_informations map_infos;
-    t_playerr player;
+    t_map_ids           map_ids;
+    t_map_informations  map_infos;
+    t_playerr           player;
+    t_player            player_3d;
     char    **original_map;
     char    **file;
     char    *no;
@@ -60,6 +74,6 @@ typedef struct s_map{
 
 int     ft_check_management(char *first_taken_map, t_map *main_s);
 int     ft_is_ok_ids(t_map *main_s);
-int     check_main(int ac, char **av);
+int     check_main(char **av, t_map *main_s);
 
 #endif
