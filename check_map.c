@@ -110,22 +110,22 @@ void    ft_fill_the_id(int id, char *path, t_map *main_s)
 {
     if (id == 1)
     {
-        main_s->no = path;
+        main_s->no = ft_strdup(path);
         main_s->map_ids.no = true;
     }
     else if (id == 2)
     {
-        main_s->so = path;
+        main_s->so = ft_strdup(path);
         main_s->map_ids.so = true;
     }
     else if (id == 3)
     {
-        main_s->ea = path;
+        main_s->ea = ft_strdup(path);
         main_s->map_ids.ea = true;
     }
     else if (id == 4)
     {
-        main_s->we = path;
+        main_s->we = ft_strdup(path);
         main_s->map_ids.we = true;
     }
 }
@@ -155,12 +155,34 @@ int ft_is_valid_path(char *path)
 {
     int fd;
 
-    fd = open(path, O_RDONLY);
-    printf(" ww %s\n", path);
+    fd = open(path, O_RDWR);
+    printf(" ww %s", path);
     if (fd == -1)
-        exit (222);
+        return (0);;
     close(fd);
-    return (0);
+    return (1);
+}
+
+char	*ft_edit_nl(char *path)
+{
+	int	i;
+	int	j;
+	char *tmp;
+
+    tmp = malloc(sizeof(char) * (ft_strlen(path) - 1));
+	i = 0;
+	j = 0;
+	while (path[i] != '\n')
+		i++;
+    printf("ZOOOOOOOOOOOOOOOOOOORT %s\n", path);
+	while (j < i)
+	{
+		tmp[j] = path[j];
+		j++;
+	}
+	tmp[i] = '\0';
+    free(path);
+	return (tmp);
 }
 
 int ft_check_line(char *line, t_map *main_s)
@@ -172,8 +194,11 @@ int ft_check_line(char *line, t_map *main_s)
     id = ft_which_id(tmp[0]);
     if (ft_id_is_true(id, main_s))
         return (1);
-    // if (ft_is_valid_path(tmp[1]) == 0)
-    //     return (1);
+    if (id != 5 && id != 6)
+	    tmp[1] = ft_edit_nl(tmp[1]);
+    if (id != 5 && id != 6 && ft_is_valid_path(tmp[1]) == 0)
+        return (1);
+	printf("I'm Here!\n");
     if (id != 5 && id != 6)
         ft_fill_the_id(id, tmp[1], main_s);
     else if (ft_is_rgb(id, tmp[1], main_s) == 0)

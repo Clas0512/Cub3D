@@ -6,31 +6,31 @@ GNL			= gnl/gnl.a
 
 MLX			= mlx/libmlx.a
 
-SRCS		= main.c check_map.c check_main.c
+SRCS		= main.c check_map.c check_main.c init_data.c init_map.c keyboard.c
 
-COMPILER	= gcc
+COMPILER	= gcc 
 
-FLAGS		= -Wall -Wextra -Werror -framework OpenGL -framework AppKit -g
-
-$(ZORT)	:
-		make -C ./gnl
-		make -C ./libft
-		make -C ./mlx
-		
-$(NAME)	: $(LIBFT) $(GNL) $(SRCS)
-		$(COMPILER) $(SRCS) $(MLX) $(LBFT) $(GNL) $(FLAGS) -o $(NAME)
-
-$(GNL) :
-		make -C ./gnl
-
-$(LBFT) :
-		make -C ./libft
+FLAGS		= -Wall -Wextra -Werror -framework OpenGL -framework AppKit
 
 all : $(NAME)
+
+$(LBFT):
+		make -C ./libft
+
+$(GNL):
+		make -C ./gnl
+
+$(MLX):
+		make -C ./mlx
+
+$(NAME)	: $(LBFT) $(GNL) $(SRCS)
+		$(COMPILER) $(SRCS) $(MLX) $(LBFT) $(GNL) $(FLAGS) -o $(NAME)
 
 clean :
 		rm -rf $(NAME)
 		make clean -C ./libft
+		make clean -C ./gnl
+		make clean -C ./mlx
 
 fclean : clean
 
