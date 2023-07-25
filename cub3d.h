@@ -6,7 +6,7 @@
 /*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:56:13 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/25 17:56:31 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/25 22:04:07 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,21 @@ typedef struct s_ray
 	double	camera_x;
 	double	ray_dir_x;
 	double	ray_dir_y;
-	int map_x;
-	int map_y;
-	double side_dist_x;
-	double side_dist_y;
-	double delta_dist_x;
-	double delta_dist_y;
-	double perp_wall_dist;
-	int step_x;
-	int step_y;
-	int	hit;
-	int	side;
-	int	line_height;
-	int	draw_start;
-	int	draw_end;
-	int	pitch;
+	int		map_x;
+	int		map_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+	double	perp_wall_dist;
+	int		step_x;
+	int		step_y;
+	int		hit;
+	int		side;
+	int		line_height;
+	int		draw_start;
+	int		draw_end;
+	int		pitch;
 }t_ray;
 
 typedef struct s_texture
@@ -55,6 +55,13 @@ typedef struct s_texture
 	int		text_y;
 } t_texture;
 
+typedef struct s_put
+{
+	int color;
+	int start;
+	int end;
+	int x;
+}				t_put;
 enum	e_dir
 {
 	NORTH,
@@ -163,7 +170,6 @@ int     ft_check_management(char *first_taken_map, t_map *main_s);
 int     ft_is_ok_ids(t_map *main_s);
 int     check_main(char **av, t_map *main_s);
 void	init_data(t_map *map, t_data *data);
-void	put_image(int x, int start, int end, int color, t_image *img);
 int 	image_color(int x, int y, t_image *img);
 size_t	ft_strlen_modded(const char *s);
 void	put_cle_floo(t_data *data);
@@ -178,5 +184,7 @@ void	calc_rot(t_data *data, double rot_speed);
 void	ft_error(int error);
 void	free_wall_name(t_map *map);
 int		ft_is_rgb(int id, char *rgb, t_map *main_s);
+void	put_image(t_put *put, t_image *img);
+void	get_dir(t_player *player);
 
 #endif

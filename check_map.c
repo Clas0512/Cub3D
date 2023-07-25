@@ -6,7 +6,7 @@
 /*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:00:00 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/25 17:53:50 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/25 22:03:58 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	ft_check_line(char *line, t_map *main_s)
 		ft_fill_the_id(id, tmp[1], main_s);
 	else if (ft_is_rgb(id, tmp[1], main_s) == 0)
 		ft_error_2(4, tmp);
+	ft_spec_tmp_free(tmp);
 	return (-1);
 }
 
@@ -72,7 +73,8 @@ int	ft_check_and_fill_map(int map_start, t_map *main_s)
 		return (1);
 	while (i < y)
 	{
-		ft_check_and_fill_maptocheck(i, map_start, main_s->file[i]);
+		if (ft_check_and_fill_maptocheck(i, map_start, main_s->file[i]))
+			return (8);
 		ft_check_and_fill_maptofill(main_s->file[i++], main_s);
 	}
 	main_s->error_value = ft_check_after(main_s);

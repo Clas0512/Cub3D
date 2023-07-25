@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/25 11:55:33 by sakkus            #+#    #+#             */
+/*   Updated: 2023/07/25 19:09:25 by sakkus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 int	calc_move(t_data *data, int sign, double move_speed)
@@ -33,10 +45,14 @@ void	calc_rot(t_data *data, double rot_speed)
 
 	old_dir_x = data->player->dir_x;
 	old_plane_x = data->player->plane_x;
- 	data->player->dir_x = data->player->dir_x * cos(rot_speed) - data->player->dir_y * sin(rot_speed);
-	data->player->dir_y = old_dir_x * sin(rot_speed) + data->player->dir_y * cos(rot_speed);
-	data->player->plane_x = data->player->plane_x * cos(rot_speed) - data->player->plane_y * sin(rot_speed);
-	data->player->plane_y = old_plane_x * sin(rot_speed) + data->player->plane_y * cos(rot_speed);
+	data->player->dir_x = data->player->dir_x * cos(rot_speed)
+		- data->player->dir_y * sin(rot_speed);
+	data->player->dir_y = old_dir_x * sin(rot_speed)
+		+ data->player->dir_y * cos(rot_speed);
+	data->player->plane_x = data->player->plane_x * cos(rot_speed)
+		- data->player->plane_y * sin(rot_speed);
+	data->player->plane_y = old_plane_x * sin(rot_speed)
+		+ data->player->plane_y * cos(rot_speed);
 }
 
 int	calc_move_d(t_data *data, int sign, double move_speed)
@@ -66,21 +82,20 @@ int	keyboard(int keycode, t_data *data)
 	double	move_speed;
 	double	rot_speed;
 
-	move_speed = data->player->speed * 50.0;
-	rot_speed = data->player->speed * 30.0;
-	if ((keycode == 119 || keycode == 13) && calc_move(data, 1, move_speed))
+	move_speed = data->player->speed * 20.0;
+	rot_speed = data->player->speed * 10.0;
+	if (keycode == 13 && calc_move(data, 1, move_speed))
 		return (0);
-	else if ((keycode == 115 || keycode == 1) && calc_move(data, -1, move_speed))
+	else if (keycode == 1 && calc_move(data, -1, move_speed))
 		return (0);
-	else if ((keycode == 97 || keycode == 0) && calc_move_d(data, -1, move_speed))
+	else if (keycode == 0 && calc_move_d(data, -1, move_speed))
 		return (0);
-	else if ((keycode == 100 || keycode == 2) && calc_move_d(data, 1, move_speed))
+	else if (keycode == 2 && calc_move_d(data, 1, move_speed))
 		return (0);
 	else if (keycode == 123)
 		calc_rot(data, rot_speed);
 	else if (keycode == 124)
 		calc_rot(data, -rot_speed);
-	mlx_clear_window(data->mlx, data->win->win_addres);
 	init_map(data);
 	return (0);
 }
@@ -89,12 +104,12 @@ int	main(int ac, char *arv[])
 {
 	t_data	data;
 	t_map	map;
-	(void)ac;
 
+	(void)ac;
 	check_main(arv, &map);
 	init_data(&map, &data);
 	init_map(&data);
-    mlx_hook(data.win->win_addres, 2, 0, keyboard, &data);
+	mlx_hook(data.win->win_addres, 2, 0, keyboard, &data);
 	mlx_loop(data.mlx);
 	return (0);
 }

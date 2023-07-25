@@ -6,7 +6,7 @@
 /*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:10:03 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/25 17:53:42 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/25 22:03:56 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ void	ft_error(int error)
 	}
 	else if (error == 1)
 		perror("Allocation Error!");
-	else if (error == 5)
+	else if (error == 5 || error == 7)
 		perror("Player Error!");
 	else if (error == 6)
 		perror("Wall Error!");
-	else if (error == 7)
-		perror("Player Error!");
+	else if (error == 8)
+		perror("Unknown Character!");
 	exit(1);
 }
 

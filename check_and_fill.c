@@ -6,7 +6,7 @@
 /*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 16:52:34 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/25 17:54:46 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/25 21:26:52 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int	ft_check_and_fill_maptocheck(int y, int map_start, char *line)
 	{
 		c = line[i];
 		if (y == map_start && c != '1' && c != ' ')
-			exit (1);
+			return (1);
 		if (!(c == 'N' || c == 'S' || c == 'W'
 				|| c == 'E' || c == '1' || c == '0' || c == ' '))
-			exit (2);
+			return (1);
 		i++;
 	}
 	return (0);
