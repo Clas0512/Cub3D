@@ -1,49 +1,105 @@
 #include "cub3d.h"
 
-void	init_image(t_data *data)
+void	init_win(t_win *win, t_map *map, void *mlx)
 {
-	data->wall_imgs = malloc(sizeof(t_data *) * 4);
-	data->wall_imgs[NORTH].image = mlx_xpm_file_to_image(data->mlx, data->map->no, &(data->wall_imgs[NORTH].width),
-		&(data->wall_imgs[NORTH].height));
-	data->wall_imgs[SOUTH].image = mlx_xpm_file_to_image(data->mlx, data->map->no, &(data->wall_imgs[SOUTH].width),
-		&(data->wall_imgs[SOUTH].height));
-	printf("%p\n", data->wall_imgs[NORTH].buffer);
-	data->wall_imgs[EAST].image = mlx_xpm_file_to_image(data->mlx, data->map->no, &(data->wall_imgs[EAST].width),
-		&(data->wall_imgs[EAST].height));
-	data->wall_imgs[WEST].image = mlx_xpm_file_to_image(data->mlx, data->map->no, &(data->wall_imgs[WEST].width),
-		&(data->wall_imgs[WEST].height));
-	// data->wall_imgs[NORTH].buffer = mlx_get_data_addr(data->wall_imgs[NORTH].image,
-	// 	&(data->wall_imgs[NORTH].bits_per_pixel), &(data->wall_imgs[NORTH].size_line), &(data->wall_imgs[NORTH].endian));
-	// data->wall_imgs[SOUTH].buffer = mlx_get_data_addr(data->wall_imgs[SOUTH].image,
-	// 	&(data->wall_imgs[SOUTH].bits_per_pixel), &(data->wall_imgs[SOUTH].size_line), &(data->wall_imgs[SOUTH].endian));
-	// data->wall_imgs[EAST].buffer = mlx_get_data_addr(data->wall_imgs[EAST].image,
-	// 	&(data->wall_imgs[EAST].bits_per_pixel), &(data->wall_imgs[EAST].size_line), &(data->wall_imgs[EAST].endian));
-	// data->wall_imgs[WEST].buffer = mlx_get_data_addr(data->wall_imgs[WEST].image,
-	// 	&(data->wall_imgs[WEST].bits_per_pixel), &(data->wall_imgs[WEST].size_line), &(data->wall_imgs[WEST].endian));
+	win->ceiling_color = map->crgb;
+	win->floor_color = map->frgb;
+	win->height_screen = 480 * 2;
+	win->width_screen = 640 * 3;
+	win->win_addres = mlx_new_window(mlx, win->width_screen, win->height_screen, "cub3d");
 }
 
-void	init_data(t_data *data)
+void	get_dir(t_player *player)
 {
-	data->units = 64;
-	data->height = data->map->map_infos.y * data->units;
-	data->width = data->map->map_infos.x * data->units;
-	data->player = &data->map->player;
-	data->player->p_x *= data->units;
-	data->player->p_y *= data->units;
-	data->player->alpha = 2 * PI;
-	data->player->p_delta_x = cos(data->player->alpha);
-	data->player->p_delta_y = sin(data->player->alpha);
-	data->raycast = malloc(sizeof(int *) * data->width);
+	if (player->direction == 'N')
+	{
+		player->dir_x = 0;
+		player->dir_y = -1;
+		player->plane_x = -0.66;
+		player->plane_y = 0;
+	}
+	else if (player->direction == 'S')
+	{
+		player->dir_x = 0;
+		player->dir_y = 1;
+		player->plane_x = 0.66;
+		player->plane_y = 0;
+	}
+	else if (player->direction == 'E')
+	{
+		player->dir_x = 1;
+		player->dir_y = 0;
+		player->plane_x = 0;
+		player->plane_y = -0.66;
+	}
+	else if (player->direction == 'W')
+	{
+		player->dir_x = -1;
+		player->dir_y = 0;
+		player->plane_x = 0;
+		player->plane_y = 0.66;
+	}
+}
+
+void	init_player(t_player *player, t_map	*map, t_data *data)
+{
+	(void)data;
+	player->pos_x = (double)map->p_x + 0.5;
+	player->pos_y = map->p_y;
+	player->direction = map->player_direction;
+	get_dir(player);
+	player->speed = 0.006000;
+}
+
+// dir_x n -> plane_y p
+// dir_y n -> plane_x n
+
+void	init_image(t_image *img, void *mlx, t_win *win)
+{
+	img->img_adress = mlx_new_image(mlx, win->width_screen, win->height_screen);
+	img->buffer = mlx_get_data_addr(img->img_adress, &(img->bbp), &(img->size_line), &(img->endian));
+}
+
+void	free_wall_name(t_map *map)
+{
+	free(map->no);
+	free(map->ea);
+	free(map->we);
+	free(map->so);
+}
+
+void	init_walls(t_image *walls, t_map *map, void *mlx)
+{
+	walls[NORTH].img_adress = mlx_xpm_file_to_image(mlx, map->no, &(walls[NORTH].width), &(walls[NORTH].height));
+	walls[SOUTH].img_adress = mlx_xpm_file_to_image(mlx, map->so, &(walls[SOUTH].width), &(walls[SOUTH].height));
+	walls[EAST].img_adress = mlx_xpm_file_to_image(mlx, map->ea, &(walls[EAST].width), &(walls[EAST].height));
+	walls[WEST].img_adress = mlx_xpm_file_to_image(mlx, map->we, &(walls[WEST].width), &(walls[WEST].height));
+	walls[NORTH].buffer = mlx_get_data_addr(walls[NORTH].img_adress, &(walls[NORTH].bbp), &(walls[NORTH].size_line), &(walls[NORTH].endian));
+	walls[SOUTH].buffer = mlx_get_data_addr(walls[SOUTH].img_adress, &(walls[SOUTH].bbp), &(walls[SOUTH].size_line), &(walls[SOUTH].endian));
+	walls[EAST].buffer = mlx_get_data_addr(walls[EAST].img_adress, &(walls[EAST].bbp), &(walls[EAST].size_line), &(walls[EAST].endian));
+	walls[WEST].buffer = mlx_get_data_addr(walls[WEST].img_adress, &(walls[WEST].bbp), &(walls[WEST].size_line), &(walls[WEST].endian));
+	free_wall_name(map);
+}
+
+void	init_data(t_map *map, t_data *data)
+{
+	t_win		*win;
+	t_player	*player;
+	t_image		*screen_image;
+	t_image		*walls;
+
 	data->mlx = mlx_init();
-	data->win = mlx_new_window(data->mlx, data->width * 2, data->height, "Cub3d");
-	data->win_img_2d = malloc(sizeof(t_image));
-	data->win_img_3d = malloc(sizeof(t_image));
-	data->win_img_2d->image = mlx_new_image(data->mlx, data->width, data->height);
-	data->win_img_3d->image = mlx_new_image(data->mlx, data->width, data->height);
-	data->win_img_2d->buffer = mlx_get_data_addr(data->win_img_2d->image, &(data->win_img_2d->bits_per_pixel), &(data->win_img_2d->size_line), &(data->win_img_2d->endian));
-	data->win_img_3d->buffer = mlx_get_data_addr(data->win_img_3d->image, &(data->win_img_3d->bits_per_pixel), &(data->win_img_3d->size_line), &(data->win_img_3d->endian));
-	data->win_img_2d->width = data->width;
-	data->win_img_2d->height = data->height;
-	data->win_img_3d->width = data->width;
-	data->win_img_3d->height = data->height;
+	walls = malloc(sizeof(t_image) * 4);
+	player = malloc(sizeof(t_player));
+	screen_image = malloc(sizeof(t_image));
+	win = malloc(sizeof(t_win));
+	init_win(win, map, data->mlx);
+	init_player(player, map, data);
+	init_image(screen_image, data->mlx, win);
+	init_walls(walls, map, data->mlx);
+	data->player = player;
+	data->win = win;
+	data->screen_image = screen_image;
+	data->walls = walls;
+	data->map = map->original_map;
 }
