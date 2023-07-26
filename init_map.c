@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anargul <anargul@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 11:52:14 by sakkus            #+#    #+#             */
-/*   Updated: 2023/07/25 13:39:57 by sakkus           ###   ########.fr       */
+/*   Updated: 2023/07/26 09:58:19 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,6 @@ void	raycasting(t_data *data, t_win *win, t_player *player)
 
 void	init_map(t_data *data)
 {
-	int			x;
-
-	x = 0;
 	mlx_clear_window(data->mlx, data->win->win_addres);
 	put_cle_floo(data);
 	raycasting(data, data->win, data->player);

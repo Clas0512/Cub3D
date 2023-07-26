@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 11:55:33 by sakkus            #+#    #+#             */
-/*   Updated: 2023/07/25 19:09:25 by sakkus           ###   ########.fr       */
+/*   Updated: 2023/07/26 14:34:25 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,17 @@ int	keyboard(int keycode, t_data *data)
 		calc_rot(data, rot_speed);
 	else if (keycode == 124)
 		calc_rot(data, -rot_speed);
+	else if (keycode == 53) // BURASI DUZELTİLCEK DİREK ÇIKIYO
+		exit(1);
 	init_map(data);
 	return (0);
+}
+
+int	close_key(int keycode, t_data *data)
+{
+	(void) keycode;
+	(void) data;
+	exit(1);
 }
 
 int	main(int ac, char *arv[])
@@ -110,6 +119,7 @@ int	main(int ac, char *arv[])
 	init_data(&map, &data);
 	init_map(&data);
 	mlx_hook(data.win->win_addres, 2, 0, keyboard, &data);
+	mlx_hook(data.win->win_addres, 17, 1L << 2, close_key, &data);
 	mlx_loop(data.mlx);
 	return (0);
 }

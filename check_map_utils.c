@@ -6,7 +6,7 @@
 /*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:10:03 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/25 22:03:56 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/26 13:28:41 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,6 @@ void	ft_find_x_y(int j, t_map *main_s)
 	main_s->map_infos.y = i;
 }
 
-void	free_double(char **file)
-{
-	int	x;
-
-	x = 0;
-	while (file[x])
-		free(file[x++]);
-	free(file);
-}
-
 void	ft_error(int error)
 {
 	if (error == -1)
@@ -72,12 +62,32 @@ void	ft_error(int error)
 	exit(1);
 }
 
+int	ft_rgb_fill(int *r, int *g, int *b, char **rgb_2d)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (i < 3)
+	{
+		while (rgb_2d[i][j] != '\0')
+		{
+			if (ft_isdigit(rgb_2d[i][j]) == 0)
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	*r = ft_atoi(rgb_2d[0]);
+	*g = ft_atoi(rgb_2d[1]);
+	*b = ft_atoi(rgb_2d[2]);
+	return (0);
+}
+
 int	ft_is_rgb(int id, char *rgb, t_map *main_s)
 {
 	char	**rgb_2d;
-	int		r;
-	int		g;
-	int		b;
 	int		i;
 
 	rgb_2d = ft_split(rgb, ',');
@@ -85,18 +95,18 @@ int	ft_is_rgb(int id, char *rgb, t_map *main_s)
 		return (0);
 	if (!rgb_2d[2])
 		return (0);
-	r = ft_atoi(rgb_2d[0]);
-	g = ft_atoi(rgb_2d[1]);
-	b = ft_atoi(rgb_2d[2]);
+	if (ft_rgb_fill(&main_s->r, &main_s->g, &main_s->b, rgb_2d))
+		return (0);
 	i = 0;
 	while (rgb_2d[i])
 		free(rgb_2d[i++]);
 	free(rgb_2d);
-	if (r > 255 || r < 0 || g > 255 || g < 0 || b > 255 || b < 0)
+	if (main_s->r > 255 || main_s->r < 0 || main_s->g > 255 || main_s->g < 0
+		|| main_s->b > 255 || main_s->b < 0)
 		return (0);
 	if (id == 5)
-		ft_fill_the_rgb_f(r, g, b, main_s);
+		ft_fill_the_rgb_f(main_s->r, main_s->g, main_s->b, main_s);
 	if (id == 6)
-		ft_fill_the_rgb_c(r, g, b, main_s);
+		ft_fill_the_rgb_c(main_s->r, main_s->g, main_s->b, main_s);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:00:00 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/25 22:03:58 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/26 14:01:54 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,19 +69,37 @@ int	ft_check_and_fill_map(int map_start, t_map *main_s)
 	ft_find_x_y(map_start, main_s);
 	y = main_s->map_infos.y + i;
 	main_s->original_map = malloc(sizeof(char *) * (main_s->map_infos.y + 1));
+	main_s->original_map[main_s->map_infos.y] = NULL;
 	if (!main_s->original_map)
 		return (1);
+	if (ft_zero_zero(main_s->file, main_s, map_start))
+		return (8);
 	while (i < y)
 	{
 		if (ft_check_and_fill_maptocheck(i, map_start, main_s->file[i]))
 			return (8);
-		ft_check_and_fill_maptofill(main_s->file[i++], main_s);
+		if (ft_check_and_fill_maptofill(main_s->file[i++], main_s))
+			return (8);
 	}
 	main_s->error_value = ft_check_after(main_s);
 	if (main_s->error_value != 0)
 		return (main_s->error_value);
 	if (ft_check_and_fill_player(main_s))
 		return (5);
+	return (0);
+}
+
+int	ft_is_last_line(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0' && line[i] != '\n')
+	{
+		if (line[i] == '1' || line[i] == '0')
+			return (1);
+		i++;
+	}
 	return (0);
 }
 
@@ -100,7 +118,7 @@ int	ft_check_management(char *first_taken_map, t_map *main_s)
 			i++;
 			continue ;
 		}
-		else if (ft_ids_are_ok(main_s))
+		if (ft_ids_are_ok(main_s))
 		{
 			error_value = ft_check_and_fill_map(i, main_s);
 			if (error_value != 0)

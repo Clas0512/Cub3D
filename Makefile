@@ -10,7 +10,7 @@ SRCS		=	*.c
 
 COMPILER	= gcc
 
-FLAGS		= -g -Wall -Wextra -Werror -framework OpenGL -framework AppKit
+FLAGS		= -g -Wall -Wextra -Werror -framework OpenGL -framework AppKit #-fsanitize=address
 
 all : $(ZORT) $(NAME)
 
