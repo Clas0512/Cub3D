@@ -6,7 +6,7 @@
 /*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:56:13 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/26 12:37:32 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/28 01:06:51 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ typedef	struct s_data
 	char		**map;
 }				t_data;
 
+int		ft_zero_zero_extra(int i, int j, int map_start, t_map *main_s);
 int		ft_zero_zero(char **map, t_map *main_s, int map_start);
 void	ft_error_2(int error, char **tmp);
 int		ft_id_is_true(int id, t_map *main_s);

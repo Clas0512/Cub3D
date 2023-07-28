@@ -6,7 +6,10 @@ GNL			= gnl/gnl.a
 
 MLX			= mlx/libmlx.a
 
-SRCS		=	*.c
+SRCS		= check_main.c check_map_utils.c color.c init_data.c \
+				get_dir.c init_map.c main.c put_image.c check_and_fill.c \
+				check_map_extra.c check_map_utils_3.c init_map_utils.c \
+				raycast_utils.c read_map.c check_map.c check_map_utils_2.c
 
 COMPILER	= gcc
 

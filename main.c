@@ -6,7 +6,7 @@
 /*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 11:55:33 by sakkus            #+#    #+#             */
-/*   Updated: 2023/07/26 14:34:25 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/28 01:18:22 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	keyboard(int keycode, t_data *data)
 		calc_rot(data, rot_speed);
 	else if (keycode == 124)
 		calc_rot(data, -rot_speed);
-	else if (keycode == 53) // BURASI DUZELTİLCEK DİREK ÇIKIYO
+	else if (keycode == 53)
 		exit(1);
 	init_map(data);
 	return (0);
@@ -109,7 +109,7 @@ int	close_key(int keycode, t_data *data)
 	exit(1);
 }
 
-int	main(int ac, char *arv[])
+int	main(int ac, char **arv)
 {
 	t_data	data;
 	t_map	map;

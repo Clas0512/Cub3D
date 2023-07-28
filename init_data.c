@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 11:38:40 by sakkus            #+#    #+#             */
-/*   Updated: 2023/07/25 19:08:13 by sakkus           ###   ########.fr       */
+/*   Updated: 2023/07/28 01:15:07 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	init_win(t_win *win, t_map *map, void *mlx)
 {
 	win->ceiling_color = map->crgb;
 	win->floor_color = map->frgb;
-	win->height_screen = 480 * 2;
-	win->width_screen = 640 * 2;
+	win->height_screen = 720 * 2;
+	win->width_screen = 1080 * 2;
 	win->win_addres = mlx_new_window(mlx, win->width_screen,
 			win->height_screen, "cub3d");
 }
