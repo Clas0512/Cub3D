@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map_utils_3.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anargul <anargul@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 01:17:25 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/28 01:17:47 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/28 17:27:16 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,10 @@ int	ft_zero_zero(char **map, t_map *main_s, int map_start)
 {
 	int	i;
 	int	j;
-	int	len;
 
 	i = map_start;
 	while (i < main_s->map_infos.y + map_start)
 	{
-		len = ft_strlen_modded(map[i]);
 		j = 0;
 		while (map[i][j] != '\n' && map[i][j] != '\0')
 		{

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/28 11:32:06 by sakkus            #+#    #+#             */
+/*   Updated: 2023/07/28 11:32:20 by sakkus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_BONUS_H
 # define GET_NEXT_LINE_BONUS_H
 
@@ -7,7 +19,6 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5
 # endif
-
 
 char	*ft_strdup(char	*str1);
 char	*get_next_line(int fd);

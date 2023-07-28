@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:00:00 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/28 00:52:47 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/28 12:14:36 by sakkus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ int	ft_check_line(char *line, t_map *main_s)
 	if (ft_id_is_true(id, main_s))
 		ft_error_2(2, tmp);
 	param = tmp[1];
+	if (!tmp[1] || tmp[2])
+		ft_error_2(3, tmp);
 	tmp[1] = ft_edit_nl(tmp[1]);
 	free(param);
 	if (id != 5 && id != 6 && ft_is_valid_path(tmp[1]) == 0)

@@ -6,7 +6,7 @@
 /*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 12:02:29 by sakkus            #+#    #+#             */
-/*   Updated: 2023/07/25 12:03:32 by sakkus           ###   ########.fr       */
+/*   Updated: 2023/07/28 10:44:32 by sakkus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	init_ray(int x, t_data *data, t_ray *ray)
 	ray->map_y = (int)data->player->pos_y;
 	ray->delta_dist_x = is_zero(ray->ray_dir_x);
 	ray->delta_dist_y = is_zero(ray->ray_dir_y);
-	ray->hit = 0;
 	ray->pitch = 100;
 }
 
@@ -78,8 +77,8 @@ void	dda(t_ray *ray, char **map)
 
 void	start_end_calc(t_ray *ray, int height)
 {
-	ray->draw_start = -ray->line_height / 2 + height / 2; 
-	ray->draw_end = ray->line_height / 2 + height / 2;
+	ray->draw_start = -ray->line_height / 2 + height / 2 + 100; 
+	ray->draw_end = ray->line_height / 2 + height / 2 + 100;
 	if (ray->draw_start < 0)
 		ray->draw_start = 0;
 	if (ray->draw_end >= height)

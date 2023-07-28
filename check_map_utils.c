@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:10:03 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/26 13:28:41 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/28 15:45:37 by sakkus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,17 @@ void	ft_error(int error)
 	if (error == -1)
 		return ;
 	else if (error == 0)
-	{
-		perror("Missing Map Line Error!");
-		exit (-1);
-	}
+		printf("Missing Map Line Error!\n");
 	else if (error == 1)
-		perror("Allocation Error!");
+		printf("Allocation Error!\n");
 	else if (error == 5 || error == 7)
-		perror("Player Error!");
+		printf("Player Error!\n");
 	else if (error == 6)
-		perror("Wall Error!");
+		printf("Wall Error!\n");
 	else if (error == 8)
-		perror("Unknown Character!");
+		printf("Unknown Character!\n");
+	else if (error == 9)
+		printf("Invalid Path Extension!\n");
 	exit(1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map_extra.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:06:57 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/25 17:54:15 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/28 12:49:15 by sakkus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ void	ft_fill_the_rgb_c(int r, int g, int b, t_map *main_s)
 void	ft_error_2(int error, char **tmp)
 {
 	if (error == 2)
-		perror("Id Error!");
+		printf("Id Error!\n");
 	else if (error == 3)
-		perror("Invalid Path Error!");
+		printf("Invalid Path Error!\n");
 	else if (error == 4)
-		perror("RGB Color Code Error!");
+		printf("RGB Color Code Error!\n");
 	ft_spec_tmp_free(tmp);
-	exit (2);
+	exit(2);
 }

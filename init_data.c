@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 11:38:40 by sakkus            #+#    #+#             */
-/*   Updated: 2023/07/28 01:15:07 by anargul          ###   ########.fr       */
+/*   Updated: 2023/07/28 11:06:07 by sakkus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,14 @@ void	init_win(t_win *win, t_map *map, void *mlx)
 {
 	win->ceiling_color = map->crgb;
 	win->floor_color = map->frgb;
-	win->height_screen = 720 * 2;
-	win->width_screen = 1080 * 2;
+	win->height_screen = 960;
+	win->width_screen = 1280;
 	win->win_addres = mlx_new_window(mlx, win->width_screen,
 			win->height_screen, "cub3d");
 }
 
-void	init_player(t_player *player, t_map	*map, t_data *data)
+void	init_player(t_player *player, t_map	*map)
 {
-	(void)data;
 	player->pos_x = (double)map->p_x + 0.5;
 	player->pos_y = (double)map->p_y + 0.5;
 	if (map->original_map[(int)player->pos_y][(int)player->pos_x] == 1)
@@ -72,6 +71,7 @@ void	init_data(t_map *map, t_data *data)
 	t_player	*player;
 	t_image		*screen_image;
 	t_image		*walls;
+	int			i;
 
 	data->mlx = mlx_init();
 	walls = malloc(sizeof(t_image) * 4);
@@ -79,7 +79,7 @@ void	init_data(t_map *map, t_data *data)
 	screen_image = malloc(sizeof(t_image));
 	win = malloc(sizeof(t_win));
 	init_win(win, map, data->mlx);
-	init_player(player, map, data);
+	init_player(player, map);
 	init_image(screen_image, data->mlx, win);
 	init_walls(walls, map, data->mlx);
 	data->player = player;
@@ -87,4 +87,9 @@ void	init_data(t_map *map, t_data *data)
 	data->screen_image = screen_image;
 	data->walls = walls;
 	data->map = map->original_map;
+	data->x_len = map->map_infos.x;
+	data->y_len = map->map_infos.y;
+	i = 0;
+	while (i < 6)
+		data->keycode[i++] = 0;
 }

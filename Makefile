@@ -6,30 +6,35 @@ GNL			= gnl/gnl.a
 
 MLX			= mlx/libmlx.a
 
-SRCS		= check_main.c check_map_utils.c color.c init_data.c \
-				get_dir.c init_map.c main.c put_image.c check_and_fill.c \
-				check_map_extra.c check_map_utils_3.c init_map_utils.c \
-				raycast_utils.c read_map.c check_map.c check_map_utils_2.c
+SRCS		=	check_main.c check_map_utils.c color.c get_dir.c init_map.c \
+				read_map.c calc_move.c check_map.c check_map_utils_2.c \
+				init_map_utils.c main.c put_image.c check_and_fill.c \
+				check_map_extra.c check_map_utils_3.c init_data.c keyboard.c \
+				raycast_utils.c
 
-COMPILER	= gcc
+CC			= gcc
 
-FLAGS		= -g -Wall -Wextra -Werror -framework OpenGL -framework AppKit #-fsanitize=address
+FLAGS		= -Wall -Wextra -Werror -framework OpenGL -framework AppKit
 
-all : $(ZORT) $(NAME)
+all : $(NAME)
 
-$(NAME)	: $(LBFT) $(GNL) $(SRCS)
-		$(COMPILER) $(SRCS) $(MLX) $(LBFT) $(GNL) $(FLAGS) -o $(NAME)
+$(NAME)	: $(LBFT) $(GNL) $(MLX) $(SRCS)
+		@$(CC) $(SRCS) $(MLX) $(LBFT) $(FLAGS) $(GNL) -o $(NAME)
 
 $(LBFT):
-		make -C libft
+		@make -C libft
 
 $(GNL):
-		make -C gnl
-		
+		@make -C gnl
+	
+$(MLX):
+		@make -C mlx
 
 clean :
-		rm -rf $(NAME)
-		make clean -C ./libft
+		@rm -rf $(NAME)
+		@make fclean -C libft
+		@make fclean -C gnl
+		@make clean -C mlx
 
 fclean : clean
 
