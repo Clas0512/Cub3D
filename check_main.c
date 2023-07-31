@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anargul <anargul@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 16:58:16 by anargul           #+#    #+#             */
-/*   Updated: 2023/07/28 15:55:27 by sakkus           ###   ########.fr       */
+/*   Updated: 2023/07/31 12:39:35 by anargul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@ void	ft_check_extension(char *path)
 		ft_error(9);
 	len--;
 	if (path[len] != '.')
+		ft_error(9);
+	len--;
+	if (path[len] == '/')
 		ft_error(9);
 }
 
